@@ -335,7 +335,7 @@
         "DisplayName": "email",
         "Subscription": [
           {
-            "Endpoint": "jeremy.kindy@gmail.com",
+            "Endpoint": "jeremy.kindy@<redacted>",
             "Protocol": "email"
           },
           {
