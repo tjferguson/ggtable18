@@ -1,0 +1,105 @@
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'SQS'
+
+#Parameters:
+#  RdsVpc:
+#    Description: VPC ID for the database
+#    Type: String
+#
+#  RdsPassword:
+#    Description: Password for the database user
+#    Type: String
+#    NoEcho: 'true'
+
+Resources:
+
+  SMSQueue: 
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: sms.fifo
+      FifoQueue: True
+      VisibilityTimeout: 60
+      RedrivePolicy: 
+        deadLetterTargetArn: !Sub ${DeadLetterQueue.Arn}
+        maxReceiveCount: 10
+
+  EmailQueue: 
+    Type: AWS::SQS::Queue
+    Properties: 
+      QueueName: email.fifo
+      FifoQueue: True
+      VisibilityTimeout: 60
+      RedrivePolicy: 
+        deadLetterTargetArn: !Sub ${DeadLetterQueue.Arn}
+        maxReceiveCount: 10
+
+  TwitterQueue: 
+    Type: AWS::SQS::Queue
+    Properties: 
+      QueueName: twitter.fifo
+      FifoQueue: True
+      VisibilityTimeout: 60
+      RedrivePolicy: 
+        deadLetterTargetArn: !Sub ${DeadLetterQueue.Arn}
+        maxReceiveCount: 10
+
+  FacebookQueue: 
+    Type: AWS::SQS::Queue
+    Properties: 
+      QueueName: facebook.fifo
+      FifoQueue: True
+      VisibilityTimeout: 60
+      RedrivePolicy: 
+        deadLetterTargetArn: !Sub ${DeadLetterQueue.Arn}
+        maxReceiveCount: 10
+
+  DeadLetterQueue: 
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: dead-letter.fifo
+      FifoQueue: True
+
+  DBAllowPolicy:
+    Type: "AWS::IAM::Policy"
+    Properties: 
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+           -
+            Effect: Allow
+            Action: rds-db:connect
+            Resource:
+             - arn:aws:rds-db:us-east-1:103562472237:dbuser:globalgiving18/lambda
+      PolicyName: allow-rds-lambda
+      Roles:
+        - data_processing
+        - email-processing
+
+#  DatabaseInstanceSecurityGroup:
+#    Type: AWS::EC2::SecurityGroup
+#    Properties:
+#      VpcId: !Ref RdsVpc
+#      GroupDescription: Allow access to database
+#      SecurityGroupIngress:
+#      - IpProtocol: tcp
+#        FromPort: 3306
+#        ToPort: 3306
+#        CidrIp: 0.0.0.0/0
+#
+#  DatabaseInstance:
+#    Type: AWS::RDS::DBInstance
+#    Properties:
+#      MasterUsername: admin18
+#      MasterUserPassword: !Ref RdsPassword
+#      BackupRetentionPeriod: 2
+#      DBSnapshotIdentifier: !Ref 'AWS::NoValue'
+#      MultiAZ: false
+#      DBInstanceClass: db.t2.micro
+#      StorageType: standard
+#      AllocatedStorage: 20
+#      Engine: MySQL
+#      EngineVersion: 5.7
+#      PubliclyAccessible: 'true'
+#      VPCSecurityGroups:
+#      - !Ref DatabaseInstanceSecurityGroup

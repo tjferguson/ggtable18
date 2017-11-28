@@ -1,0 +1,48 @@
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Lambda handler for API Gateway - FB Chat integration
+Outputs:
+  ApiUrl:
+    Description: URL of your API endpoint
+    Value:
+      Fn::Join:
+      - ''
+      - - https://
+        - Ref: ApiGatewayApi
+        - .execute-api.
+        - Ref: AWS::Region
+        - .amazonaws.com/prod
+Resources:
+  ApiGatewayApi:
+    Properties:
+      DefinitionUri: s3://gg-18-lambda-deploy/swagger-fb.yaml
+      StageName: prod
+      Variables:
+        LambdaFunctionName:
+          Ref: LambdaFunction
+    Type: AWS::Serverless::Api
+  LambdaFunction:
+    Properties:
+      CodeUri: s3://gg-18-lambda-deploy/chatbot.zip
+      Description: Lambda handler for API Gateway - FB Chat integration
+      Events:
+        AddPhotoApiGet:
+          Properties:
+            Method: GET
+            Path: /send-message
+            RestApiId:
+              Ref: ApiGatewayApi
+          Type: Api
+        AddPhotoApiPost:
+          Properties:
+            Method: POST
+            Path: /send-message
+            RestApiId:
+              Ref: ApiGatewayApi
+          Type: Api
+      Handler: index.handler
+      MemorySize: 256
+      Runtime: nodejs4.3
+      Timeout: 60
+    Type: AWS::Serverless::Function
+Transform: AWS::Serverless-2016-10-31
