@@ -1,0 +1,798 @@
+
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+    "vpc651b801d": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "172.31.0.0/16",
+        "InstanceTenancy": "default",
+        "EnableDnsSupport": "true",
+        "EnableDnsHostnames": "true"
+      }
+    },
+    "subnet1abd6b47": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "172.31.32.0/20",
+        "AvailabilityZone": "us-east-1d",
+        "VpcId": {
+          "Ref": "vpc651b801d"
+        }
+      }
+    },
+    "subnet5f6eeb60": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "172.31.64.0/20",
+        "AvailabilityZone": "us-east-1e",
+        "VpcId": {
+          "Ref": "vpc651b801d"
+        }
+      }
+    },
+    "subnet89583aed": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "172.31.0.0/20",
+        "AvailabilityZone": "us-east-1a",
+        "VpcId": {
+          "Ref": "vpc651b801d"
+        }
+      }
+    },
+    "subnetcf3a32c3": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "172.31.48.0/20",
+        "AvailabilityZone": "us-east-1f",
+        "VpcId": {
+          "Ref": "vpc651b801d"
+        }
+      }
+    },
+    "subnetfe815cd1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "172.31.80.0/20",
+        "AvailabilityZone": "us-east-1b",
+        "VpcId": {
+          "Ref": "vpc651b801d"
+        }
+      }
+    },
+    "subnet7a7de331": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "172.31.16.0/20",
+        "AvailabilityZone": "us-east-1c",
+        "VpcId": {
+          "Ref": "vpc651b801d"
+        }
+      }
+    },
+    "igw0325417a": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+      }
+    },
+    "dopt1c7a3765": {
+      "Type": "AWS::EC2::DHCPOptions",
+      "Properties": {
+        "DomainName": "ec2.internal",
+        "DomainNameServers": [
+          "AmazonProvidedDNS"
+        ]
+      }
+    },
+    "aclbd9174c6": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "VpcId": {
+          "Ref": "vpc651b801d"
+        }
+      }
+    },
+    "rtbe1c4c49b": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "vpc651b801d"
+        }
+      }
+    },
+    "rdsglobalgiving18": {
+      "Type": "AWS::RDS::DBInstance",
+      "Properties": {
+        "AllocatedStorage": "20",
+        "AllowMajorVersionUpgrade": "false",
+        "AutoMinorVersionUpgrade": "true",
+        "DBInstanceClass": "db.t2.micro",
+        "Port": "3306",
+        "PubliclyAccessible": "true",
+        "StorageType": "gp2",
+        "BackupRetentionPeriod": "3",
+        "MasterUsername": "admin18",
+        "MasterUserPassword": "MyPassword",
+        "PreferredBackupWindow": "05:18-05:48",
+        "PreferredMaintenanceWindow": "mon:07:15-mon:07:45",
+        "DBName": "MyDatabase",
+        "Engine": "mysql",
+        "EngineVersion": "5.7.19",
+        "LicenseModel": "general-public-license",
+        "DBSubnetGroupName": {
+          "Ref": "dbsubnetdefault"
+        },
+        "VPCSecurityGroups": [
+          {
+            "Ref": "sgrdslaunchwizard"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "workload-type",
+            "Value": "other"
+          }
+        ]
+      }
+    },
+    "tableNotifications": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "notifications_id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "notifications_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": "5",
+          "WriteCapacityUnits": "5"
+        }
+      }
+    },
+    "s3cftemplates1ifzx88ggrantuseast1": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "AccessControl": "Private",
+        "VersioningConfiguration": {
+          "Status": "Suspended"
+        }
+      }
+    },
+    "s3gg18lambdadeploy": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "AccessControl": "Private",
+        "VersioningConfiguration": {
+          "Status": "Suspended"
+        }
+      }
+    },
+    "s3smstable18": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "AccessControl": "Private",
+        "VersioningConfiguration": {
+          "Status": "Suspended"
+        }
+      }
+    },
+    "s3smstestdeploymentsmobilehub1986186163": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "AccessControl": "Private",
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      }
+    },
+    "s3t18pub": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "AccessControl": "PublicReadWrite",
+        "VersioningConfiguration": {
+          "Status": "Suspended"
+        }
+      }
+    },
+    "s3table18": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "AccessControl": "Private",
+        "VersioningConfiguration": {
+          "Status": "Suspended"
+        }
+      }
+    },
+    "dbsubnetdefault": {
+      "Type": "AWS::RDS::DBSubnetGroup",
+      "Properties": {
+        "DBSubnetGroupDescription": "default",
+        "SubnetIds": [
+          {
+            "Ref": "subnet5f6eeb60"
+          },
+          {
+            "Ref": "subnet89583aed"
+          },
+          {
+            "Ref": "subnetcf3a32c3"
+          },
+          {
+            "Ref": "subnetfe815cd1"
+          },
+          {
+            "Ref": "subnet7a7de331"
+          },
+          {
+            "Ref": "subnet1abd6b47"
+          }
+        ]
+      }
+    },
+    "queuedeadletterfifo": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "DelaySeconds": "0",
+        "MaximumMessageSize": "262144",
+        "MessageRetentionPeriod": "345600",
+        "ReceiveMessageWaitTimeSeconds": "0",
+        "VisibilityTimeout": "30"
+      }
+    },
+    "queueemailfifo": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "DelaySeconds": "0",
+        "MaximumMessageSize": "262144",
+        "MessageRetentionPeriod": "345600",
+        "ReceiveMessageWaitTimeSeconds": "0",
+        "VisibilityTimeout": "60",
+        "RedrivePolicy": {
+          "maxReceiveCount": 10,
+          "deadLetterTargetArn": {
+            "Fn::GetAtt": [
+              "queuedeadletterfifo",
+              "Arn"
+            ]
+          }
+        }
+      }
+    },
+    "queuefacebookfifo": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "DelaySeconds": "0",
+        "MaximumMessageSize": "262144",
+        "MessageRetentionPeriod": "345600",
+        "ReceiveMessageWaitTimeSeconds": "0",
+        "VisibilityTimeout": "60",
+        "RedrivePolicy": {
+          "maxReceiveCount": 10,
+          "deadLetterTargetArn": {
+            "Fn::GetAtt": [
+              "queuedeadletterfifo",
+              "Arn"
+            ]
+          }
+        }
+      }
+    },
+    "queuesmsfifo": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "DelaySeconds": "0",
+        "MaximumMessageSize": "262144",
+        "MessageRetentionPeriod": "345600",
+        "ReceiveMessageWaitTimeSeconds": "0",
+        "VisibilityTimeout": "60",
+        "RedrivePolicy": {
+          "maxReceiveCount": 10,
+          "deadLetterTargetArn": {
+            "Fn::GetAtt": [
+              "queuedeadletterfifo",
+              "Arn"
+            ]
+          }
+        }
+      }
+    },
+    "queuetwitterfifo": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "DelaySeconds": "0",
+        "MaximumMessageSize": "262144",
+        "MessageRetentionPeriod": "345600",
+        "ReceiveMessageWaitTimeSeconds": "0",
+        "VisibilityTimeout": "60",
+        "RedrivePolicy": {
+          "maxReceiveCount": 10,
+          "deadLetterTargetArn": {
+            "Fn::GetAtt": [
+              "queuedeadletterfifo",
+              "Arn"
+            ]
+          }
+        }
+      }
+    },
+    "topicdynamodb": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "dynamodb"
+      }
+    },
+    "topicemail": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "email",
+        "Subscription": [
+          {
+            "Endpoint": "jeremy.kindy@gmail.com",
+            "Protocol": "email"
+          },
+          {
+            "Endpoint": "arn:aws:lambda:us-east-1:103562472237:function:email-topic",
+            "Protocol": "lambda"
+          }
+        ]
+      }
+    },
+    "topicggsms": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "gg-sms",
+        "Subscription": [
+          {
+            "Endpoint": "arn:aws:lambda:us-east-1:103562472237:function:sms-send",
+            "Protocol": "lambda"
+          }
+        ]
+      }
+    },
+    "sgrdslaunchwizard": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Created from the RDS Management Console",
+        "VpcId": {
+          "Ref": "vpc651b801d"
+        }
+      }
+    },
+    "sgdefault": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "default VPC security group",
+        "VpcId": {
+          "Ref": "vpc651b801d"
+        }
+      }
+    },
+    "dbsgdefault": {
+      "Type": "AWS::RDS::DBSecurityGroup",
+      "Properties": {
+        "GroupDescription": "default"
+      }
+    },
+    "snspolicydynamodb": {
+      "Type": "AWS::SNS::TopicPolicy",
+      "Properties": {
+        "Topics": [
+          {
+            "Ref": "topicdynamodb"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2008-10-17",
+          "Id": "__default_policy_ID",
+          "Statement": [
+            {
+              "Sid": "__default_statement_ID",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Action": [
+                "SNS:GetTopicAttributes",
+                "SNS:SetTopicAttributes",
+                "SNS:AddPermission",
+                "SNS:RemovePermission",
+                "SNS:DeleteTopic",
+                "SNS:Subscribe",
+                "SNS:ListSubscriptionsByTopic",
+                "SNS:Publish",
+                "SNS:Receive"
+              ],
+              "Resource": {
+                "Ref": "topicdynamodb"
+              },
+              "Condition": {
+                "StringEquals": {
+                  "AWS:SourceOwner": "103562472237"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "snspolicyemail": {
+      "Type": "AWS::SNS::TopicPolicy",
+      "Properties": {
+        "Topics": [
+          {
+            "Ref": "topicemail"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2008-10-17",
+          "Id": "__default_policy_ID",
+          "Statement": [
+            {
+              "Sid": "__default_statement_ID",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Action": [
+                "SNS:GetTopicAttributes",
+                "SNS:SetTopicAttributes",
+                "SNS:AddPermission",
+                "SNS:RemovePermission",
+                "SNS:DeleteTopic",
+                "SNS:Subscribe",
+                "SNS:ListSubscriptionsByTopic",
+                "SNS:Publish",
+                "SNS:Receive"
+              ],
+              "Resource": {
+                "Ref": "topicemail"
+              },
+              "Condition": {
+                "StringEquals": {
+                  "AWS:SourceOwner": "103562472237"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "snspolicyggsms": {
+      "Type": "AWS::SNS::TopicPolicy",
+      "Properties": {
+        "Topics": [
+          {
+            "Ref": "topicggsms"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2008-10-17",
+          "Id": "__default_policy_ID",
+          "Statement": [
+            {
+              "Sid": "__default_statement_ID",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Action": [
+                "SNS:GetTopicAttributes",
+                "SNS:SetTopicAttributes",
+                "SNS:AddPermission",
+                "SNS:RemovePermission",
+                "SNS:DeleteTopic",
+                "SNS:Subscribe",
+                "SNS:ListSubscriptionsByTopic",
+                "SNS:Publish",
+                "SNS:Receive"
+              ],
+              "Resource": {
+                "Ref": "topicggsms"
+              },
+              "Condition": {
+                "StringEquals": {
+                  "AWS:SourceOwner": "103562472237"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "s3policytable18": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "s3table18"
+        },
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "AllowSESPuts",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ses.amazonaws.com"
+              },
+              "Action": "s3:PutObject",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    "table",
+                    "18/*"
+                  ]
+                ]
+              },
+              "Condition": {
+                "StringEquals": {
+                  "aws:Referer": "103562472237"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "alarmNotificationsReadCapacityUnitsLimitBasicAlarm": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ActionsEnabled": "true",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": "5",
+        "MetricName": "ConsumedReadCapacityUnits",
+        "Namespace": "AWS/DynamoDB",
+        "Period": "60",
+        "Statistic": "Sum",
+        "Threshold": "240.0",
+        "AlarmActions": [
+          "arn:aws:sns:us-east-1:103562472237:dynamodb"
+        ],
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": "Notifications"
+          }
+        ]
+      }
+    },
+    "alarmNotificationsWriteCapacityUnitsLimitBasicAlarm": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ActionsEnabled": "true",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": "5",
+        "MetricName": "ConsumedWriteCapacityUnits",
+        "Namespace": "AWS/DynamoDB",
+        "Period": "60",
+        "Statistic": "Sum",
+        "Threshold": "240.0",
+        "AlarmActions": [
+          "arn:aws:sns:us-east-1:103562472237:dynamodb"
+        ],
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": "Notifications"
+          }
+        ]
+      }
+    },
+    "acl1": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "CidrBlock": "0.0.0.0/0",
+        "Egress": "true",
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "100",
+        "NetworkAclId": {
+          "Ref": "aclbd9174c6"
+        }
+      }
+    },
+    "acl2": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "CidrBlock": "0.0.0.0/0",
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "100",
+        "NetworkAclId": {
+          "Ref": "aclbd9174c6"
+        }
+      }
+    },
+    "subnetacl1": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "aclbd9174c6"
+        },
+        "SubnetId": {
+          "Ref": "subnetfe815cd1"
+        }
+      }
+    },
+    "subnetacl2": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "aclbd9174c6"
+        },
+        "SubnetId": {
+          "Ref": "subnet89583aed"
+        }
+      }
+    },
+    "subnetacl3": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "aclbd9174c6"
+        },
+        "SubnetId": {
+          "Ref": "subnet1abd6b47"
+        }
+      }
+    },
+    "subnetacl4": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "aclbd9174c6"
+        },
+        "SubnetId": {
+          "Ref": "subnet7a7de331"
+        }
+      }
+    },
+    "subnetacl5": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "aclbd9174c6"
+        },
+        "SubnetId": {
+          "Ref": "subnet5f6eeb60"
+        }
+      }
+    },
+    "subnetacl6": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "aclbd9174c6"
+        },
+        "SubnetId": {
+          "Ref": "subnetcf3a32c3"
+        }
+      }
+    },
+    "gw1": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "vpc651b801d"
+        },
+        "InternetGatewayId": {
+          "Ref": "igw0325417a"
+        }
+      }
+    },
+    "route1": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "RouteTableId": {
+          "Ref": "rtbe1c4c49b"
+        },
+        "GatewayId": {
+          "Ref": "igw0325417a"
+        }
+      },
+      "DependsOn": "gw1"
+    },
+    "dchpassoc1": {
+      "Type": "AWS::EC2::VPCDHCPOptionsAssociation",
+      "Properties": {
+        "VpcId": {
+          "Ref": "vpc651b801d"
+        },
+        "DhcpOptionsId": {
+          "Ref": "dopt1c7a3765"
+        }
+      }
+    },
+    "ingress1": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "sgrdslaunchwizard"
+        },
+        "IpProtocol": "tcp",
+        "FromPort": "3306",
+        "ToPort": "3306",
+        "CidrIp": "208.78.232.18/32"
+      }
+    },
+    "ingress2": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "sgrdslaunchwizard"
+        },
+        "IpProtocol": "tcp",
+        "FromPort": "3306",
+        "ToPort": "3306",
+        "CidrIp": "0.0.0.0/0"
+      }
+    },
+    "ingress3": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "sgdefault"
+        },
+        "IpProtocol": "-1",
+        "SourceSecurityGroupId": {
+          "Ref": "sgdefault"
+        },
+        "SourceSecurityGroupOwnerId": "103562472237"
+      }
+    },
+    "ingress4": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "sgdefault"
+        },
+        "IpProtocol": "-1",
+        "SourceSecurityGroupId": {
+          "Ref": "sgdefault"
+        },
+        "SourceSecurityGroupOwnerId": "103562472237"
+      }
+    },
+    "egress1": {
+      "Type": "AWS::EC2::SecurityGroupEgress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "sgrdslaunchwizard"
+        },
+        "IpProtocol": "-1",
+        "CidrIp": "0.0.0.0/0"
+      }
+    },
+    "egress2": {
+      "Type": "AWS::EC2::SecurityGroupEgress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "sgdefault"
+        },
+        "IpProtocol": "-1",
+        "CidrIp": "0.0.0.0/0"
+      }
+    },
+    "egress3": {
+      "Type": "AWS::EC2::SecurityGroupEgress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "sgdefault"
+        },
+        "IpProtocol": "-1",
+        "CidrIp": "0.0.0.0/0"
+      }
+    }
+  },
+  "Description": "Hackathon 2017"
+}
